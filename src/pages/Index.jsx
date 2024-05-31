@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Heading, HStack, Spacer, Text, VStack, Avatar, Badge, Input, InputGroup, InputLeftElement, Button, Textarea, Stack, IconButton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, HStack, Spacer, Text, VStack, Avatar, Badge, Input, InputGroup, InputLeftElement, Button, Textarea, Stack, IconButton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, Input as ChakraInput, Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaHome, FaUser, FaHeart, FaComment, FaBars, FaTimes, FaEdit, FaCamera, FaTrash } from "react-icons/fa";
 
@@ -42,9 +42,11 @@ const MainSection = () => {
 };
 
 const ProfileSection = () => {
-  const [name, setName] = useState("John Doe");
-  const [age, setAge] = useState(30);
-  const [bio, setBio] = useState("Just a regular person");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [interests, setInterests] = useState("");
+  const [bio, setBio] = useState("");
   const [images, setImages] = useState([]);
 
   const handleImageChange = (e) => {
@@ -60,12 +62,38 @@ const ProfileSection = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
+  const handleSaveChanges = () => {
+    // Save profile information (for now, just log it)
+    console.log({ name, age, gender, interests, bio, images });
+  };
+
   return (
     <VStack spacing={8} w="full" maxW="container.md" p={4}>
       <Heading as="h2" size="lg">Edit Profile</Heading>
-      <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-      <Input placeholder="Age" type="number" value={age} onChange={(e) => setAge(e.target.value)} />
-      <Textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} />
+      <FormControl isRequired>
+        <FormLabel>Name</FormLabel>
+        <ChakraInput placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Age</FormLabel>
+        <ChakraInput placeholder="Age" type="number" value={age} onChange={(e) => setAge(e.target.value)} />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Gender</FormLabel>
+        <Select placeholder="Select gender" value={gender} onChange={(e) => setGender(e.target.value)}>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </Select>
+      </FormControl>
+      <FormControl>
+        <FormLabel>Interests</FormLabel>
+        <ChakraInput placeholder="Interests" value={interests} onChange={(e) => setInterests(e.target.value)} />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Bio</FormLabel>
+        <Textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} />
+      </FormControl>
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <Stack direction="row" spacing={4}>
         {images.map((image, index) => (
@@ -75,7 +103,7 @@ const ProfileSection = () => {
           </Box>
         ))}
       </Stack>
-      <Button leftIcon={<FaEdit />} colorScheme="teal" variant="solid">Save Changes</Button>
+      <Button leftIcon={<FaEdit />} colorScheme="teal" variant="solid" onClick={handleSaveChanges}>Save Changes</Button>
     </VStack>
   );
 };
